@@ -1,24 +1,39 @@
-import logo from './logo.svg';
-import './App.css';
+import { Canvas } from "@react-three/fiber";
+import "./App.css";
+import Box from "./components/Box";
+import { ContactShadows, OrbitControls, Select } from "@react-three/drei";
+import { Suspense, useState } from "react";
 
 function App() {
+  const [selected, setSelected] = useState([]);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Canvas camera={{ position: [5, 5, 5], fov: 75 }}>
+        <OrbitControls
+          makeDefault
+          rotateSpeed={2}
+          minPolarAngle={0}
+          maxPolarAngle={Math.PI / 2.5}
+        />
+        <Suspense fallback={null}>
+          <Select multiple box onChange={setSelected}>
+            <Box position={[0, 0.5, 0]} />
+          </Select>
+          <ContactShadows
+            frames={1}
+            position={[0, -0.1, 0]}
+            scale={15}
+            opacity={0.2}
+            far={1}
+            blur={2}
+          />
+          <ambientLight />
+          <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
+          <pointLight position={[-10, -10, -10]} />
+          {/* <gridHelper /> */}
+        </Suspense>
+      </Canvas>
+    </>
   );
 }
 
